@@ -14,7 +14,6 @@ SLACK = Slacker(TOKEN)
 URL = MAIN_API + urllib.parse.urlencode({'apiKey':API_KEY})
 JSON_DATA = requests.get(URL).json()
 
-#Post on slack
-#print(str(JSON_DATA['symbol'])+" "+"Hodlers"+": "+str(JSON_DATA['holdersCount']))
-
-SLACK.chat.post_message('#general', str(JSON_DATA['symbol'])+" "+"Hodlers"+": "+str(JSON_DATA['holdersCount']))
+#post on slack
+#SLACK.chat.post_message('#general', str(JSON_DATA['symbol'])+" "+"Hodlers"+": "+str(JSON_DATA['holdersCount']))
+SLACK.chat.post_message('#general', "Today we have" + " " + str(JSON_DATA['holdersCount']) + " " + "wallets containing" + " " + str(JSON_DATA['symbol']))
