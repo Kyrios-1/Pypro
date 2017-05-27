@@ -1,13 +1,15 @@
+"""Download json with Bittrex wallet details from ethplorer extract token name & holder count"""
+
 import urllib.parse
 import requests
 
-main_api = 'https://api.ethplorer.io/getAddressInfo/0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98?'
-api_key = 'freekey'
-url = main_api + urllib.parse.urlencode({'apiKey':api_key})
-json_data = requests.get(url).json()
-token_Details = json_data['tokens']
+MAIN_API = 'https://api.ethplorer.io/getAddressInfo/0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98?'
+API_KEY = 'freekey'
+URL = MAIN_API + urllib.parse.urlencode({'apiKey':API_KEY})
+JSON_DATA = requests.get(URL).json()
+TOKEN_DETAILS = JSON_DATA['tokens']
 
-for item in token_Details:
-    token_Details = item['tokenInfo']
-    if token_Details['name'] == str('SingularDTV'):
-        print(str(token_Details['name'])+" "+"Hodlers"+": "+str(token_Details['holdersCount']))
+for item in TOKEN_DETAILS:
+    TOKEN_DETAILS = item['tokenInfo']
+    if TOKEN_DETAILS['name'] == str('SingularDTV'):
+        print(str(TOKEN_DETAILS['name'])+" "+"Hodlers"+": "+str(TOKEN_DETAILS['holdersCount']))
