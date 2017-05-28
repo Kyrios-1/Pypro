@@ -5,6 +5,7 @@ import requests
 from slacker import Slacker
 
 def check_wallets(token_contract, api_key, slack_token, slack_channel):
+#def check_wallets(token_contract, api_key):
     '''Check wallet function(this is 2 functions in one, need to spilt  ethplorer/slack)'''
 
     #encode url & request data from ethplorer
@@ -12,7 +13,8 @@ def check_wallets(token_contract, api_key, slack_token, slack_channel):
            + token_contract +'?'+ urllib.parse.urlencode({'apiKey':api_key}))
 
     json_data = requests.get(url).json()
-
+    
+#def slack_post(slack_token, slack_channel)
     #format message
     message = ("Hi, Today we have" + " " + str(json_data['holdersCount']) + " "
                + "wallets containing" + " " + str(json_data['symbol']))
