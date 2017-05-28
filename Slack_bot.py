@@ -1,25 +1,26 @@
-"""slackbot to post data from ethplorer"""
+'''slackbot to post data from ethplorer'''
 
 import urllib.parse
 import requests
 from slacker import Slacker
 
-#constants
-API_DOM = 'api.ethplorer.io'
-API_KEY = 'freekey'
-API_METHOD = 'getTokenInfo'
-TOKEN_CONTRACT = '0xaec2e87e0a235266d9c5adc9deb4b2e29b54d009'
-SLACK_TOKEN = 'xoxb-189051142021-A6zoOt0Hk6QLdZK5GVCWyMLX' #slack.com maps token to team
-SLACK_CHANNEL = '#general'
+def check_wallets(token_contract, api_key, slack_token, slack_channel):
+    '''Check wallet function(this is 2 functions in one, need to spilt  ethplorer/slack)'''
 
+    #encode url & request data from ethplorer
+    url = ('https://api.ethplorer.io/getTokenInfo/'
+           + token_contract +'?'+ urllib.parse.urlencode({'apiKey':api_key}))
 
-URL = 'https://'+ API_DOM +'/'+ API_METHOD +'/'+ TOKEN_CONTRACT +'?'+ urllib.parse.urlencode({'apiKey':API_KEY}) #encode url
-JSON_DATA = requests.get(URL).json() #grab data from ethplorer
+    json_data = requests.get(url).json()
 
-MESSAGE = "Hi, Today we have" + " " + str(JSON_DATA['holdersCount']) + " " + "wallets containing" + " " + str(JSON_DATA['symbol']) #format message
+    #format message
+    message = ("Hi, Today we have" + " " + str(json_data['holdersCount']) + " "
+               + "wallets containing" + " " + str(json_data['symbol']))
 
-SLACK = Slacker(SLACK_TOKEN) #pass token info to slacker
-SLACK.chat.post_message(channel=SLACK_CHANNEL, text=MESSAGE, as_user=True) #post message on slack
+    #Post message to slack
+    slack = Slacker(slack_token)
+    slack.chat.post_message(channel=slack_channel, text=message, as_user=True)
+
+check_wallets('0xaec2e87e0a235266d9c5adc9deb4b2e29b54d009', 'freekey', 'xoxb-189051142021-A6zoOt0Hk6QLdZK5GVCWyMLX', '#general')
 
 #todo: error handling, run once a day
-#def check_wallets(API_URL, API_KEY, API_METHOD, TOKEN_CONTRACT):
