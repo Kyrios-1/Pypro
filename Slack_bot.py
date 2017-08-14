@@ -2,6 +2,7 @@
 
 import urllib.parse
 import requests
+import socket
 from slacker import Slacker
 
 def ethplorer_request(token_contract, api_key):
@@ -13,11 +14,17 @@ def ethplorer_request(token_contract, api_key):
                 api_key: Ethplorer api key
     """
     #encode url & request json from ethplorer
-    url = ('https://api.ethplorer.io/getTokenInfo/' + token_contract
-           + '?' + urllib.parse.urlencode({'apiKey':api_key}))
+    url = (
+        'https://api.ethplorer.io/getTokenInfo/' + token_contract
+        + '?' + urllib.parse.urlencode({'apiKey':api_key}))
+
     json_data = requests.get(url).json()
     #create a dictionary with chosen results
     return {'symbol' : str(json_data['symbol']), 'holdersCount' : str(json_data['holdersCount'])}
+
+    #Except socket.error:
+
+    #time.sleep(sleeptime)
 
 def slack_post(slack_token, slack_channel):
     """
@@ -29,8 +36,10 @@ def slack_post(slack_token, slack_channel):
     """
     token_info = ethplorer_request('0xaec2e87e0a235266d9c5adc9deb4b2e29b54d009', 'freekey')
     #construct message text
-    message = ("Hi, Today we have" + " " + token_info['holdersCount'] + " "
-               + "wallets containing" + " " + token_info['symbol'])
+    message = (
+        "Hi, Today we have" + " " + token_info['holdersCount'] + " "
+        + "wallets containing" + " " + token_info['symbol'])
+
     #print(message)
 
     #Post message to slack
